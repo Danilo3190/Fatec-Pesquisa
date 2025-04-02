@@ -1,7 +1,7 @@
 /* Define o background da página */
 body {
     background-color: #f4f4f4; /* Cor de fundo cinza claro */
-    background-image: url("/assets/red.jpg"); /* URL da imagem */
+    background-image: url("/assets/green.jpeg"); /* URL da imagem */
     background-size: cover; /* Ajusta a imagem para cobrir toda a tela */
     background-position: center; /* Centraliza a imagem */
     background-repeat: no-repeat; /* Impede a repetição */
@@ -11,14 +11,17 @@ body {
 .dropdown-container {
     text-align: center;
     margin: auto;
-    width: 50%;  /* Ajusta a largura do contêiner */
+    width: 17%;  /* Ajusta a largura do contêiner */
 }
 
 /* Estilo para o dropdown */
 .dropdown {
-    width: 100%;  /* Faz o dropdown ocupar 100% da largura do contêiner */
-    padding: 10px;  /* Adiciona um pouco de espaço interno */
-    font-size: 16px;  /* Ajusta o tamanho da fonte */
+    text-align: center; /* Centraliza o texto visível no dropdown */
+    text-align-last: center; /* Centraliza as opções dentro do dropdown */
+    width: 100%; /* Faz o dropdown ocupar 100% da largura do contêiner */
+    padding: 10px; /* Adiciona um pouco de espaço interno */
+    font-size: 16px; /* Ajusta o tamanho da fonte */
+    
 
 }
 

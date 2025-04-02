@@ -8,7 +8,7 @@ from io import BytesIO
 import nltk
 from nltk.corpus import stopwords
 
-# Configurações iniciais
+# Baixa as stopwords
 nltk.download('stopwords')
 
 # Função para converter letras de colunas em índices
@@ -21,7 +21,7 @@ def coluna_para_indice(coluna):
 # Carrega os dados
 df = pd.read_excel("Question_Socio.xlsx", sheet_name="Sheet1")
 
-# Lista de colunas a serem removidas (original)
+# Lista de colunas a serem removidas
 colunas_para_remover = [
     "A", "B", "C", "D", "F", "G", "H", "J", "K", "M", "N", "O", "P", "Q", "S", "T", "V", "W", "Y", "Z",
     "AB", "AC", "AE", "AF", "AH", "AI", "AK", "AL", "AN", "AO", "AQ", "AR", "AT", "AU", "AW", "AX", "AZ", "BA",
@@ -42,24 +42,17 @@ colunas_para_remover = [
 df = df.drop(df.columns[[coluna_para_indice(col) for col in colunas_para_remover]], axis=1)
 df = df.dropna(how="all")
 
-# Função para nuvem de palavras (atualizada)
-def generate_wordcloud(selected_column):
-    if selected_column in df.columns:
-        text = " ".join(df[selected_column].dropna().astype(str))
+# Função para nuvem de palavras
+def generate_wordcloud():
+    if "Escreva algumas linhas sobre sua história e seus sonhos de vida" in df.columns:
+        text = " ".join(df["Escreva algumas linhas sobre sua história e seus sonhos de vida"].dropna().astype(str))
         stopwords_pt = set(stopwords.words('portuguese'))
-        custom_stopwords = {
-            "meu", "minha", "quero", "que", "para", "ser", "uma", "um", "ter", 
-            "fazer", "vida", "curso", "anos", "depois", "porque", "área", "também"
-        }
+        custom_stopwords = {"meu", "ter", "busco", "quero", "minha", "que", "um", "uma", "também", "para", "onde", "em", "área", "vida", "anos", "sonho", "outros", "fazer", "possa","sempre","duas", "ano", "nisso"}
         stopwords_pt.update(custom_stopwords)
         
         wordcloud = WordCloud(
-            width=800, height=400, 
-            background_color="white", 
-            max_words=100, 
-            colormap="viridis", 
-            stopwords=stopwords_pt
-        ).generate(text)
+            width=800, height=400, background_color="white", max_words=100, colormap="viridis", stopwords=stopwords_pt
+        ).generate(" ".join([word for word in text.split() if word.lower() not in stopwords_pt]))
 
         buffer = BytesIO()
         plt.figure(figsize=(10, 5))
@@ -70,25 +63,18 @@ def generate_wordcloud(selected_column):
         return base64.b64encode(buffer.getvalue()).decode("utf-8")
     return None
 
-# Colunas que geram nuvem de palavras
-COLUNAS_NUVEM = [
-    "Escreva algumas linhas sobre sua história e seus sonhos de vida",
-    "Qual sua maior expectativa quanto ao curso?",
-    "Qual sua expectativa após se formar?",
-    "Por que você escolheu este curso?"
-]
-
 # Cria o app
 app = Dash(__name__, assets_folder="assets")
 
 # Layout
 app.layout = html.Div([
+    # Título
     html.H1("Dashboard Socioeconômico - FATEC Franca", className="dashboard-title"),
     
-    # Nuvem de palavras (topo)
+    # Nuvem de palavras 
     html.Div(id="wordcloud-container", className="wordcloud-container"),
 
-    # Controles
+    # Controles (dropdown + rádio)
     html.P("Escolha uma coluna para visualizar:", className="dashboard-description"),
     html.Div([
         dcc.Dropdown(
@@ -104,13 +90,13 @@ app.layout = html.Div([
                 {'label': 'Gráfico de Pizza', 'value': 'pie'},
                 {'label': 'Gráfico de Barras', 'value': 'bar'}
             ],
-            value='pie',
+            value='pie',  # Gráfico de pizza como padrão
             inline=True,
             className="radio-items"
         )
     ], className="controls-container"),
 
-    # Gráfico principal
+    # Gráfico (parte inferior)
     dcc.Graph(id="graph")
 ])
 
@@ -125,7 +111,7 @@ def update_graph(selected_column, chart_type):
         fig = px.pie(
             df, 
             names=selected_column, 
-            title=f"Distribuição de {selected_column}",
+            title=f"Distribuição de {selected_column} (Pizza)",
             hole=0.3
         )
         fig.update_traces(textposition='inside', textinfo='percent+label')
@@ -133,7 +119,7 @@ def update_graph(selected_column, chart_type):
         fig = px.bar(
             df, 
             x=selected_column, 
-            title=f"Distribuição de {selected_column}", 
+            title=f"Distribuição de {selected_column} (Barras)", 
             text_auto=True
         )
     return fig
@@ -143,14 +129,15 @@ def update_graph(selected_column, chart_type):
     Input("dropdown-column", "value")
 )
 def update_wordcloud(selected_column):
-    if selected_column in COLUNAS_NUVEM:
-        image_base64 = generate_wordcloud(selected_column)
+    if selected_column == "Escreva algumas linhas sobre sua história e seus sonhos de vida":
+        image_base64 = generate_wordcloud()
         if image_base64:
             return [
-                html.H2(f"Nuvem de Palavras - {selected_column}"),
+                html.H2("Nuvem de Palavras - Sonhos e Histórias"),
                 html.Img(src=f"data:image/png;base64,{image_base64}")
             ]
     return None
+
 
 if __name__ == "__main__":
     app.run(debug=True)
