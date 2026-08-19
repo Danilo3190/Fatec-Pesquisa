@@ -3,7 +3,7 @@
 =============================================================================
 FATEC Pesquisa - Plataforma Analítica & Portal do Aluno
 Faculdade de Tecnologia de Franca (Dr. Thomaz Novelino)
-Visualização Centrada nos Cards de Cursos com Catálogo Visual de Perguntas Clicáveis
+Visualização Direta, Sem Gráficos de Pizza, Focada em Leitura Rápida e Simples
 =============================================================================
 """
 
@@ -110,19 +110,19 @@ OPCOES_CURSOS_COMPLETAS = [
 ]
 
 # =============================================================================
-# CATÁLOGO VISUAL DE PERGUNTAS CLICÁVEIS POR CATEGORIA
+# CATÁLOGO VISUAL DE PERGUNTAS CLICÁVEIS POR CATEGORIA (SEM PIZZA)
 # =============================================================================
 CATALOGO_PERGUNTAS = [
     {
         "categoria": "👤 Perfil & Dados Pessoais",
         "cor": "#0284c7",
         "itens": [
-            {"id": "q_periodo", "titulo": "Turno / Período", "icone": "🕒", "termos": ["período que cursa", "periodo", "turno"], "tipo": "donut"},
+            {"id": "q_periodo", "titulo": "Turno / Período", "icone": "🕒", "termos": ["período que cursa", "periodo", "turno"], "tipo": "bar-h"},
             {"id": "q_cidade", "titulo": "Cidade Onde Reside", "icone": "📍", "termos": ["cidade você reside", "cidade"], "tipo": "bar-h"},
-            {"id": "q_genero", "titulo": "Gênero dos Alunos", "icone": "👫", "termos": ["gênero", "genero"], "tipo": "donut"},
+            {"id": "q_genero", "titulo": "Gênero dos Alunos", "icone": "👫", "termos": ["gênero", "genero"], "tipo": "bar-h"},
             {"id": "q_faixa", "titulo": "Faixa Etária / Idade", "icone": "🎂", "termos": ["faixa etária", "faixa etaria"], "tipo": "bar-h"},
-            {"id": "q_escola", "titulo": "Histórico Escolar (Ensino Médio)", "icone": "🏫", "termos": ["vida escolar", "estudou"], "tipo": "donut"},
-            {"id": "q_civil", "titulo": "Estado Civil", "icone": "💍", "termos": ["estado civil"], "tipo": "donut"},
+            {"id": "q_escola", "titulo": "Histórico Escolar (Ensino Médio)", "icone": "🏫", "termos": ["vida escolar", "estudou"], "tipo": "bar-h"},
+            {"id": "q_civil", "titulo": "Estado Civil", "icone": "💍", "termos": ["estado civil"], "tipo": "bar-h"},
             {"id": "q_filhos", "titulo": "Quantidade de Filhos", "icone": "👶", "termos": ["filhos você tem", "filhos"], "tipo": "bar-h"},
         ]
     },
@@ -131,7 +131,7 @@ CATALOGO_PERGUNTAS = [
         "cor": "#7c3aed",
         "itens": [
             {"id": "q_renda", "titulo": "Faixa de Renda Familiar", "icone": "💵", "termos": ["faixa de renda", "renda mensal"], "tipo": "bar-h"},
-            {"id": "q_domicilio", "titulo": "Situação do Domicílio", "icone": "🏠", "termos": ["situação do domicílio", "situacao"], "tipo": "donut"},
+            {"id": "q_domicilio", "titulo": "Situação do Domicílio", "icone": "🏠", "termos": ["situação do domicílio", "situacao"], "tipo": "bar-h"},
             {"id": "q_mora_com", "titulo": "Com Quem o Aluno Mora", "icone": "👥", "termos": ["com quem você mora", "com quem"], "tipo": "bar-h"},
             {"id": "q_moradores", "titulo": "Pessoas na Residência", "icone": "👨‍👩‍👧‍👦", "termos": ["quantas pessoas", "moram no seu domicílio"], "tipo": "bar-h"},
             {"id": "q_esc_mae", "titulo": "Escolaridade da Mãe", "icone": "👩‍🎓", "termos": ["escolaridade da sua mãe", "mãe"], "tipo": "bar-h"},
@@ -142,11 +142,11 @@ CATALOGO_PERGUNTAS = [
         "categoria": "💼 Mercado de Trabalho & Carreira",
         "cor": "#059669",
         "itens": [
-            {"id": "q_trabalha", "titulo": "Trabalha Atualmente?", "icone": "💼", "termos": ["você trabalha?", "trabalha?"], "tipo": "donut"},
+            {"id": "q_trabalha", "titulo": "Trabalha Atualmente?", "icone": "💼", "termos": ["você trabalha?", "trabalha?"], "tipo": "bar-h"},
             {"id": "q_vinculo", "titulo": "Tipo de Vínculo (CLT/Estágio)", "icone": "📝", "termos": ["vínculo com o emprego", "vinculo"], "tipo": "bar-h"},
-            {"id": "q_area_trab", "titulo": "Trabalha na Área do Curso?", "icone": "🎯", "termos": ["área do seu trabalho", "área"], "tipo": "donut"},
-            {"id": "q_regime", "titulo": "Regime de Trabalho", "icone": "⏰", "termos": ["regime de trabalho"], "tipo": "donut"},
-            {"id": "q_saude", "titulo": "Possui Plano de Saúde?", "icone": "🏥", "termos": ["plano de saúde", "saude"], "tipo": "donut"},
+            {"id": "q_area_trab", "titulo": "Trabalha na Área do Curso?", "icone": "🎯", "termos": ["área do seu trabalho", "área"], "tipo": "bar-h"},
+            {"id": "q_regime", "titulo": "Regime de Trabalho", "icone": "⏰", "termos": ["regime de trabalho"], "tipo": "bar-h"},
+            {"id": "q_saude", "titulo": "Possui Plano de Saúde?", "icone": "🏥", "termos": ["plano de saúde", "saude"], "tipo": "bar-h"},
         ]
     },
     {
@@ -154,23 +154,23 @@ CATALOGO_PERGUNTAS = [
         "cor": "#d97706",
         "itens": [
             {"id": "q_bens_geral", "titulo": "Painel Geral de Equipamentos", "icone": "📊", "termos": ["bens_geral"], "tipo": "bens_geral"},
-            {"id": "q_internet", "titulo": "Internet em Casa", "icone": "🌐", "termos": ["internet"], "tipo": "donut"},
-            {"id": "q_smartphone", "titulo": "Smartphone / Celular", "icone": "📱", "termos": ["celular e(ou) smartphone", "smartphone"], "tipo": "donut"},
-            {"id": "q_notebook", "titulo": "Possui Notebook", "icone": "💻", "termos": ["notebook"], "tipo": "donut"},
-            {"id": "q_desktop", "titulo": "Computador Desktop", "icone": "🖥️", "termos": ["microcomputador", "desktop"], "tipo": "donut"},
-            {"id": "q_automovel", "titulo": "Possui Automóvel", "icone": "🚗", "termos": ["automóvel", "automovel"], "tipo": "donut"},
-            {"id": "q_motocicleta", "titulo": "Possui Motocicleta", "icone": "🏍️", "termos": ["motocicleta"], "tipo": "donut"},
-            {"id": "q_streaming", "titulo": "Streaming / TV por Assinatura", "icone": "📺", "termos": ["streaming", "tv por assinatura"], "tipo": "donut"},
+            {"id": "q_internet", "titulo": "Internet em Casa", "icone": "🌐", "termos": ["internet"], "tipo": "bar-h"},
+            {"id": "q_smartphone", "titulo": "Smartphone / Celular", "icone": "📱", "termos": ["celular e(ou) smartphone", "smartphone"], "tipo": "bar-h"},
+            {"id": "q_notebook", "titulo": "Possui Notebook", "icone": "💻", "termos": ["notebook"], "tipo": "bar-h"},
+            {"id": "q_desktop", "titulo": "Computador Desktop", "icone": "🖥️", "termos": ["microcomputador", "desktop"], "tipo": "bar-h"},
+            {"id": "q_automovel", "titulo": "Possui Automóvel", "icone": "🚗", "termos": ["automóvel", "automovel"], "tipo": "bar-h"},
+            {"id": "q_motocicleta", "titulo": "Possui Motocicleta", "icone": "🏍️", "termos": ["motocicleta"], "tipo": "bar-h"},
+            {"id": "q_streaming", "titulo": "Streaming / TV por Assinatura", "icone": "📺", "termos": ["streaming", "tv por assinatura"], "tipo": "bar-h"},
         ]
     },
     {
         "categoria": "🎯 Finalidades de Uso da Tecnologia",
         "cor": "#0891b2",
         "itens": [
-            {"id": "q_fin_escolar", "titulo": "Para Trabalhos Escolares", "icone": "📚", "termos": ["para trabalhos escolares"], "tipo": "donut"},
-            {"id": "q_fin_prof", "titulo": "Para Trabalhos Profissionais", "icone": "💼", "termos": ["para trabalhos profissionais"], "tipo": "donut"},
-            {"id": "q_fin_entret", "titulo": "Para Entretenimento & Redes", "icone": "🎮", "termos": ["para entretenimento"], "tipo": "donut"},
-            {"id": "q_fin_banco", "titulo": "Para Operações Bancárias", "icone": "🏦", "termos": ["para operações bancárias", "operações bancárias"], "tipo": "donut"},
+            {"id": "q_fin_escolar", "titulo": "Para Trabalhos Escolares", "icone": "📚", "termos": ["para trabalhos escolares"], "tipo": "bar-h"},
+            {"id": "q_fin_prof", "titulo": "Para Trabalhos Profissionais", "icone": "💼", "termos": ["para trabalhos profissionais"], "tipo": "bar-h"},
+            {"id": "q_fin_entret", "titulo": "Para Entretenimento & Redes", "icone": "🎮", "termos": ["para entretenimento"], "tipo": "bar-h"},
+            {"id": "q_fin_banco", "titulo": "Para Operações Bancárias", "icone": "🏦", "termos": ["para operações bancárias", "operações bancárias"], "tipo": "bar-h"},
         ]
     },
     {
@@ -313,7 +313,7 @@ LAYOUT_DEFAULTS = dict(
     paper_bgcolor="rgba(0,0,0,0)",
     plot_bgcolor="rgba(0,0,0,0)",
     font=dict(family="Inter, system-ui, -apple-system, sans-serif", color="#1e293b", size=13),
-    margin=dict(l=35, r=25, t=45, b=35),
+    margin=dict(l=20, r=25, t=35, b=25),
     hoverlabel=dict(bgcolor="#0f172a", font_size=13, font_family="Inter, sans-serif", font_color="#ffffff", bordercolor="#0284c7")
 )
 
@@ -676,13 +676,13 @@ def renderizar_cards_de_cursos(df, active_course):
     return html.Div(className="course-hub-grid", children=cards)
 
 # =============================================================================
-# HELPER DE RENDERIZAÇÃO DE GRÁFICO CLARO PARA LEIGOS
+# HELPER DE RENDERIZAÇÃO DE RESULTADOS: SIMPLES, DIRETO E SEM PIZZA
 # =============================================================================
 def criar_grafico_para_leigos(df, col, titulo, tipo='bar-h'):
     if col not in df.columns or df[col].dropna().empty:
         return html.Div(className="chart-card full-width", style={"textAlign": "center", "padding": "40px"}, children=[
             html.H4("Nenhum dado registrado para esta pergunta neste curso.", style={"color": "#0f172a"}),
-            html.P("Assim que alunos deste curso responderem pelo formulário, o gráfico aparecerá automaticamente.", style={"color": "#64748b"})
+            html.P("Assim que alunos deste curso responderem pelo formulário, as métricas aparecerão automaticamente.", style={"color": "#64748b"})
         ])
         
     vc = df[col].dropna().astype(str).value_counts().reset_index()
@@ -695,81 +695,67 @@ def criar_grafico_para_leigos(df, col, titulo, tipo='bar-h'):
     pct_lider = vc.iloc[0]['Percentual']
     qtd_lider = vc.iloc[0]['Respostas']
     
-    if tipo == 'bar-h':
-        vc_chart = vc.head(12).sort_values(by='Respostas', ascending=True)
-        fig = px.bar(
-            vc_chart,
-            x='Respostas',
-            y=col,
-            orientation='h',
-            text='Texto',
-            color='Respostas',
-            color_continuous_scale="Blues",
-            title=titulo
-        )
-        fig.update_layout(coloraxis_showscale=False, yaxis_title="", xaxis_title="Número de Alunos")
-        fig.update_traces(textposition='outside')
-    elif tipo == 'donut':
-        fig = px.pie(
-            vc,
-            names=col,
-            values='Respostas',
-            hole=0.48,
-            color_discrete_sequence=COLOR_SEQUENCE,
-            title=titulo
-        )
-        fig.update_traces(textposition='inside', textinfo='percent+label', marker=dict(line=dict(color='#ffffff', width=2)))
-    elif tipo == 'treemap':
-        fig = px.treemap(
-            vc,
-            path=[col],
-            values='Respostas',
-            color='Respostas',
-            color_continuous_scale='Blues',
-            title=titulo
-        )
-    else:
-        fig = px.bar(vc, x=col, y='Respostas', text='Texto', title=titulo)
-        fig.update_traces(textposition='outside')
-        
-    fig.update_layout(**LAYOUT_DEFAULTS)
+    # 1. CARDS VISUAIS DE PROGRESSO (MÉTRICA RÁPIDA E ELEGANTE)
+    cards_opcoes = []
+    icones_rank = ["🥇 1º Mais Votado", "🥈 2º Lugar", "🥉 3º Lugar", "4º Lugar", "5º Lugar", "6º Lugar", "7º Lugar", "8º Lugar"]
     
+    for idx, row in vc.head(8).iterrows():
+        is_leader = (idx == 0)
+        rank_label = icones_rank[idx] if idx < len(icones_rank) else f"{idx+1}º Lugar"
+        pct_val = row['Percentual']
+        bar_color = "#0284c7" if is_leader else "#64748b"
+        
+        cards_opcoes.append(
+            html.Div(className=f"metric-option-card {'metric-option-leader' if is_leader else ''}", children=[
+                html.Div(className="metric-option-top", children=[
+                    html.Span(rank_label, className="metric-rank-badge", style={"color": "#0284c7" if is_leader else "#64748b"}),
+                    html.Span(f"{row['Respostas']} aluno(s)", className="metric-count-pill")
+                ]),
+                html.Div(row[col], className="metric-option-name"),
+                html.Div(className="metric-option-percent-row", children=[
+                    html.Span(f"{pct_val:.1f}%", className="metric-large-percent"),
+                    html.Span(f"({row['Respostas']}/{total})", className="metric-fraction")
+                ]),
+                html.Div(className="metric-progress-bg", children=[
+                    html.Div(className="metric-progress-fill", style={"width": f"{pct_val:.1f}%", "backgroundColor": bar_color})
+                ])
+            ])
+        )
+
+    # 2. GRÁFICO DE BARRAS HORIZONTAIS LIMPO
+    vc_chart = vc.head(10).sort_values(by='Respostas', ascending=True)
+    fig = px.bar(
+        vc_chart,
+        x='Respostas',
+        y=col,
+        orientation='h',
+        text='Texto',
+        color='Respostas',
+        color_continuous_scale="Blues",
+        title=titulo
+    )
+    fig.update_layout(coloraxis_showscale=False, yaxis_title="", xaxis_title="Número de Alunos", **LAYOUT_DEFAULTS)
+    fig.update_traces(textposition='outside', cliponaxis=False)
+
+    # 3. RESUMO DIRETO PARA LEIGOS
     resumo_leigo = html.Div(className="layman-insight-card", children=[
-        html.Div(className="insight-badge", children="💡 Leitura Fácil dos Resultados"),
+        html.Div(className="insight-badge", children="💡 Resumo Claro dos Resultados"),
         html.P([
-            html.Span("Opção mais frequente: ", style={"fontWeight": "600", "color": "#0f172a"}),
+            html.Span("Maioria dos alunos escolheu: ", style={"fontWeight": "600", "color": "#0f172a"}),
             html.Strong(f"'{item_lider}'", style={"color": "#0284c7"}),
             f" representando ",
             html.Strong(f"{pct_lider:.1f}%", style={"color": "#059669"}),
             f" do total ({qtd_lider} de {total} alunos que responderam)."
         ], style={"margin": 0, "fontSize": "0.95rem", "lineHeight": "1.5"})
     ])
-    
-    tabela_resumo = dash_table.DataTable(
-        columns=[
-            {"name": "Opção / Resposta", "id": col},
-            {"name": "Total de Estudantes", "id": "Respostas_Formatado"},
-            {"name": "Porcentagem", "id": "Percentual_Formatado"}
-        ],
-        data=[
-            {
-                col: row[col],
-                "Respostas_Formatado": f"{row['Respostas']} aluno(s)",
-                "Percentual_Formatado": f"{row['Percentual']:.1f}%"
-            }
-            for _, row in vc.iterrows()
-        ],
-        style_table={'overflowX': 'auto', 'marginTop': '14px'},
-        style_cell={'textAlign': 'left', 'padding': '10px 14px', 'fontFamily': 'Inter, sans-serif', 'fontSize': '0.86rem', 'backgroundColor': '#ffffff', 'color': '#334155', 'border': '1px solid #e2e8f0'},
-        style_header={'backgroundColor': '#f8fafc', 'fontWeight': 'bold', 'color': '#0f172a', 'border': '1px solid #e2e8f0'}
-    )
-    
+
     return html.Div(className="chart-card full-width", children=[
-        dcc.Graph(figure=fig),
+        html.H3(titulo, className="chart-card-title", style={"marginBottom": "16px"}),
         resumo_leigo,
-        html.Hr(style={"borderColor": "rgba(226, 232, 240, 0.8)", "margin": "18px 0"}),
-        html.H4("Detalhamento em Tabela", style={"fontSize": "0.92rem", "color": "#94a3b8", "marginBottom": "10px"}),
-        tabela_resumo
+        html.Div(className="metric-cards-grid", children=cards_opcoes),
+        html.Hr(style={"borderColor": "rgba(226, 232, 240, 0.8)", "margin": "24px 0 16px 0"}),
+        html.H4("Visualização Gráfica Comparativa", style={"fontSize": "0.95rem", "fontWeight": "700", "color": "#0f172a", "marginBottom": "8px"}),
+        dcc.Graph(figure=fig)
     ])
 
 # =============================================================================
@@ -1235,7 +1221,7 @@ def render_active_course_section(active_course, active_question_id, json_data):
     ])
 
     # =========================================================================
-    # CATÁLOGO VISUAL DE BOTÕES CLICÁVEIS DE PERGUNTAS (LAYOUT VISUAL & FÁCIL)
+    # CATÁLOGO VISUAL DE BOTÕES CLICÁVEIS DE PERGUNTAS
     # =========================================================================
     blocos_catalogo = []
     
@@ -1268,13 +1254,13 @@ def render_active_course_section(active_course, active_question_id, json_data):
     painel_catalogo_visual = html.Div(className="catalog-visual-wrapper", children=[
         html.Div(className="catalog-header-bar", children=[
             html.H3("👇 Clique na pergunta que deseja analisar neste curso:", className="catalog-main-title"),
-            html.Span("Selecione qualquer opção abaixo para abrir o gráfico e as explicações instantaneamente", className="catalog-sub-title")
+            html.Span("Selecione qualquer opção abaixo para abrir os resultados instantaneamente", className="catalog-sub-title")
         ]),
         html.Div(className="catalog-groups-container", children=blocos_catalogo)
     ])
 
     # =========================================================================
-    # RENDERIZADOR DO GRÁFICO DA PERGUNTA CLICADA
+    # RENDERIZADOR DO RESULTADO DA PERGUNTA CLICADA
     # =========================================================================
     def achar_col(termos):
         for col in df_curso.columns:
@@ -1311,19 +1297,44 @@ def render_active_course_section(active_course, active_question_id, json_data):
         if posse_dados:
             df_bens = pd.DataFrame(posse_dados).sort_values(by="Porcentagem", ascending=True)
             df_bens["Texto"] = [f"{p:.1f}% ({q} alunos)" for p, q in zip(df_bens["Porcentagem"], df_bens["Qtd"])]
+            
+            # Cards de resumo dos bens
+            cards_bens = []
+            for _, r in df_bens.sort_values(by="Porcentagem", ascending=False).iterrows():
+                cards_bens.append(
+                    html.Div(className="metric-option-card", children=[
+                        html.Div(className="metric-option-top", children=[
+                            html.Span("📱 Recurso", className="metric-rank-badge"),
+                            html.Span(f"{r['Qtd']} alunos", className="metric-count-pill")
+                        ]),
+                        html.Div(r['Equipamento'], className="metric-option-name"),
+                        html.Div(className="metric-option-percent-row", children=[
+                            html.Span(f"{r['Porcentagem']:.1f}%", className="metric-large-percent"),
+                            html.Span(f"({r['Qtd']}/{total_alunos})", className="metric-fraction")
+                        ]),
+                        html.Div(className="metric-progress-bg", children=[
+                            html.Div(className="metric-progress-fill", style={"width": f"{r['Porcentagem']:.1f}%", "backgroundColor": "#0284c7"})
+                        ])
+                    ])
+                )
+            
             fig_bens = px.bar(
                 df_bens, x="Porcentagem", y="Equipamento", orientation='h',
                 text="Texto", color="Porcentagem", color_continuous_scale="Blues",
                 title=f"Acesso à Tecnologia dos Alunos de {curso_info['sigla']}"
             )
-            fig_bens.update_traces(textposition='outside')
+            fig_bens.update_traces(textposition='outside', cliponaxis=False)
             fig_bens.update_layout(coloraxis_showscale=False, yaxis_title="", xaxis_title="Porcentagem (%)", **LAYOUT_DEFAULTS)
+            
             conteudo_grafico = html.Div(className="chart-card full-width", children=[
-                dcc.Graph(figure=fig_bens),
+                html.H3(f"Acesso a Recursos Tecnológicos ({curso_info['sigla']})", className="chart-card-title", style={"marginBottom": "16px"}),
                 html.Div(className="layman-insight-card", children=[
                     html.Div(className="insight-badge", children="💡 Leitura Fácil"),
                     html.P(f"Visão consolidada dos equipamentos e serviços de conectividade dos estudantes de {curso_info['sigla']}.", style={"margin": 0, "fontSize": "0.95rem"})
-                ])
+                ]),
+                html.Div(className="metric-cards-grid", children=cards_bens),
+                html.Hr(style={"borderColor": "rgba(226, 232, 240, 0.8)", "margin": "24px 0 16px 0"}),
+                dcc.Graph(figure=fig_bens)
             ])
             
     # 2. Caso Especial: Nuvem de Palavras / Questões Qualitativas
@@ -1343,7 +1354,7 @@ def render_active_course_section(active_course, active_question_id, json_data):
                 color="Ocorrências", color_continuous_scale="Blues",
                 title=f"Conceitos Mais Citados ({curso_info['sigla']}) - {item_selecionado['titulo']}"
             )
-            fig_termos.update_traces(textposition='outside')
+            fig_termos.update_traces(textposition='outside', cliponaxis=False)
             fig_termos.update_layout(coloraxis_showscale=False, yaxis_title="", **LAYOUT_DEFAULTS)
             comp_termos = dcc.Graph(figure=fig_termos)
         else:
@@ -1355,11 +1366,11 @@ def render_active_course_section(active_course, active_question_id, json_data):
         
         conteudo_grafico = html.Div(className="chart-card full-width", children=[
             html.H3(f"{item_selecionado['icone']} {item_selecionado['titulo']} ({curso_info['sigla']})", className="chart-card-title", style={"marginBottom": "16px"}),
-            html.Div(className="wordcloud-container", children=[comp_nuvem, comp_termos]),
-            html.Div(className="layman-insight-card", style={"marginTop": "18px"}, children=[
+            html.Div(className="layman-insight-card", children=[
                 html.Div(className="insight-badge", children="💡 Leitura Fácil dos Sonhos & Expectativas"),
                 html.P("Os termos destacados refletem as principais ambições profissionais, crescimento pessoal e objetivos dos alunos.", style={"margin": 0, "fontSize": "0.95rem"})
-            ])
+            ]),
+            html.Div(className="wordcloud-container", children=[comp_nuvem, comp_termos])
         ])
 
     # 3. Caso Especial: Tabela de Respostas
@@ -1393,12 +1404,12 @@ def render_active_course_section(active_course, active_question_id, json_data):
             ])
         ])
 
-    # 4. Caso Padrão: Pergunta Específica Clicada
+    # 4. Caso Padrão: Pergunta Específica Clicada (Layout Simples e Direto)
     else:
         col_encontrada = achar_col(item_selecionado["termos"])
         if col_encontrada:
             titulo_grafico = f"{item_selecionado['icone']} {item_selecionado['titulo']} ({curso_info['sigla']})"
-            conteudo_grafico = criar_grafico_para_leigos(df_curso, col_encontrada, titulo_grafico, tipo=item_selecionado["tipo"])
+            conteudo_grafico = criar_grafico_para_leigos(df_curso, col_encontrada, titulo_grafico, tipo='bar-h')
         else:
             conteudo_grafico = html.Div(className="chart-card full-width", style={"textAlign": "center", "padding": "40px"}, children=[
                 html.H4("Pergunta não encontrada no banco de dados para este curso.", style={"color": "#0f172a"})
@@ -1569,7 +1580,7 @@ if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8050))
     print(f"\n=======================================================")
     print(f">> Fatec Pesquisa iniciado com sucesso!")
-    print(f">> Catálogo Visual de Perguntas Clicáveis Ativo")
+    print(f">> Modo Visualização Direta & Sem Pizza Ativo")
     print(f">> Acesse no navegador: http://127.0.0.1:{port}")
     print(f"=======================================================\n")
     app.run(

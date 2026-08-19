@@ -516,10 +516,112 @@ body {
 
 .chart-card-title {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1.12rem;
-  font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 800;
   color: var(--text-main);
   margin: 0;
+}
+
+/* ==========================================================================
+   Cards de Métricas e Barras de Progresso Lineares
+   ========================================================================== */
+.metric-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.metric-option-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all var(--transition-fast);
+}
+
+.metric-option-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+.metric-option-leader {
+  background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+  border: 2px solid #0284c7;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.15);
+}
+
+.metric-option-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.metric-rank-badge {
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-count-pill {
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+}
+
+.metric-option-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 10px;
+  line-height: 1.35;
+  min-height: 28px;
+}
+
+.metric-option-percent-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.metric-large-percent {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.metric-fraction {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.metric-progress-bg {
+  background-color: #f1f5f9;
+  border-radius: var(--radius-xs);
+  height: 8px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.metric-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-xs);
+  transition: width 0.4s ease;
 }
 
 .layman-insight-card {
