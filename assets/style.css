@@ -523,66 +523,165 @@ body {
 }
 
 /* ==========================================================================
-   Card de Resultados Ultra-Compacto & Barras Finas Horizontais
+   Lista Visual de Resultados: Elegante, Limpa e Agradável (Sem Gráficos)
    ========================================================================== */
-.compact-result-card {
+.result-list-card {
   background: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 16px 20px;
-  box-shadow: var(--shadow-card);
-  animation: fadeIn 0.25s ease;
+  padding: 20px 24px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  animation: fadeIn 0.3s ease;
 }
 
-.compact-result-header {
+.result-list-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.result-header-title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #f1f5f9;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.compact-header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.compact-title {
+.result-main-title {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.12rem;
   font-weight: 800;
   color: var(--text-main);
   margin: 0;
 }
 
-.compact-total-pill {
-  font-size: 0.76rem;
+.result-total-badge {
+  font-size: 0.8rem;
   font-weight: 700;
   background: #f1f5f9;
-  color: var(--text-muted);
-  padding: 3px 8px;
-  border-radius: var(--radius-xs);
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: var(--radius-xl);
 }
 
-.compact-insight-badge {
-  background: #f0f9ff;
+.result-highlight-box {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   border: 1px solid #bae6fd;
-  padding: 4px 12px;
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
-.slim-bars-container {
+.result-rows-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.slim-bar-row {
+.result-list-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 240px) 1fr 140px;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  transition: all var(--transition-fast);
+}
+
+@media (max-width: 768px) {
+  .result-list-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+.result-list-row:hover {
+  border-color: #0284c7;
+  background: #f8fafc;
+  transform: translateX(3px);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.08);
+}
+
+.result-list-row-leader {
+  background: #f0f9ff;
+  border: 1.5px solid #38bdf8;
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.12);
+}
+
+.list-row-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.list-rank-badge {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #0284c7;
+  flex-shrink: 0;
+  width: 44px;
+}
+
+.list-option-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-row-center {
+  width: 100%;
+}
+
+.list-bar-track {
+  background: #e2e8f0;
+  border-radius: 6px;
+  height: 9px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.list-bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.list-row-right {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.list-percent-text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.list-count-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+}
   display: grid;
   grid-template-columns: 48px minmax(140px, 220px) 1fr 65px 95px;
   align-items: center;
