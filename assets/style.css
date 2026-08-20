@@ -523,8 +523,53 @@ body {
 }
 
 /* ==========================================================================
-   Cards de Métricas e Barras de Progresso Lineares
+   Grid Compacto de Análise: Métricas (Esquerda) + Gráfico de Barras (Direita)
    ========================================================================== */
+.compact-analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 16px;
+  align-items: stretch;
+}
+
+@media (max-width: 960px) {
+  .compact-analysis-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.compact-cards-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  align-content: start;
+}
+
+.compact-chart-col {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-col-header {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.chart-col-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
 .metric-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
