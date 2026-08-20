@@ -382,6 +382,77 @@ def limpar_nome_coluna(col):
     col = re.sub(r'\s+', ' ', col)
     return col.strip()
 
+def normalizar_respostas_coluna(val, col_name):
+    if pd.isna(val) or val is None:
+        return val
+    s = str(val).strip()
+    if s == "":
+        return val
+    s_low = s.lower()
+    c_low = col_name.lower()
+    
+    # 1. Turno / Período: Manhã, Diurno, Matutino -> "Manhã / Diurno" ; Noite, Noturno -> "Noite / Noturno" ; Tarde, Vespertino -> "Tarde / Vespertino"
+    if any(k in c_low for k in ["periodo", "período", "turno"]):
+        if any(x in s_low for x in ["manhã", "manha", "matutino", "diurno"]):
+            return "Manhã / Diurno"
+        elif any(x in s_low for x in ["noite", "noturno"]):
+            return "Noite / Noturno"
+        elif any(x in s_low for x in ["tarde", "vespertino"]):
+            return "Tarde / Vespertino"
+        elif any(x in s_low for x in ["ead", "distância", "distancia", "virtual"]):
+            return "EaD / Flexível"
+            
+    # 2. Trabalho (Sim / Não)
+    if "você trabalha" in c_low or "voce trabalha" in c_low or c_low == "trabalha?":
+        if s_low.startswith("sim"):
+            return "Sim"
+        elif s_low.startswith("n"):
+            return "Não"
+
+    # 3. Área de Trabalho
+    if "área do seu trabalho" in c_low or "area do seu trabalho" in c_low or "área do trabalho" in c_low:
+        if "área do curso" in s_low or "area do curso" in s_low or s_low == "sim":
+            return "Sim, trabalho na área do curso"
+        elif "outra" in s_low or s_low == "não" or s_low == "nao":
+            return "Não, trabalho em outra área"
+        elif "não se aplica" in s_low or "nao se aplica" in s_low:
+            return "Não se aplica"
+
+    # 4. Estado Civil
+    if "estado civil" in c_low:
+        if "solteir" in s_low:
+            return "Solteiro(a)"
+        elif "casad" in s_low or "união" in s_low or "uniao" in s_low:
+            return "Casado(a)"
+        elif "divorc" in s_low or "separad" in s_low:
+            return "Divorciado(a)"
+        elif "viuv" in s_low:
+            return "Viúvo(a)"
+
+    # 5. Moradia / Situação do Domicílio
+    if "domicílio" in c_low or "domicilio" in c_low:
+        if "própri" in s_low or "propri" in s_low:
+            return "Próprio"
+        elif "financ" in s_low:
+            return "Financiado"
+        elif "alug" in s_low:
+            return "Alugado"
+        elif "cedid" in s_low:
+            return "Cedido / Outros"
+
+    # 6. Histórico Escolar (Ensino Médio)
+    if "vida escolar" in c_low or "estudou" in c_low:
+        if "sempre" in s_low and "pública" in s_low:
+            return "Sempre na escola pública"
+        elif "maior parte" in s_low and "pública" in s_low:
+            return "Maior parte na escola pública"
+        elif "sempre" in s_low and "particular" in s_low:
+            return "Sempre em escola particular"
+        elif "maior parte" in s_low and "particular" in s_low:
+            return "Maior parte em escola particular"
+
+    return s
+
 def processar_dataframe(df_raw):
     df = df_raw.copy()
     df.columns = [limpar_nome_coluna(c) for c in df.columns]
@@ -404,6 +475,10 @@ def processar_dataframe(df_raw):
         
     df = df[colunas_manter]
     df = df.dropna(how="all")
+    
+    # Aplicar normalização de respostas para linkar sinônimos (ex: Manhã/Diurno e Noite/Noturno)
+    for c in df.columns:
+        df[c] = df[c].apply(lambda x: normalizar_respostas_coluna(x, c))
     
     coluna_nasc = None
     for c in df.columns:
@@ -802,10 +877,10 @@ def criar_layout_area_do_aluno():
                         dcc.Dropdown(
                             id="aluno-periodo",
                             options=[
-                                {"label": "Matutino (Manhã)", "value": "Manhã"},
-                                {"label": "Vespertino (Tarde)", "value": "Tarde"},
-                                {"label": "Noturno (Noite)", "value": "Noite"},
-                                {"label": "EaD (Horário Flexível)", "value": "EaD"}
+                                {"label": "Matutino (Manhã / Diurno)", "value": "Manhã / Diurno"},
+                                {"label": "Noturno (Noite)", "value": "Noite / Noturno"},
+                                {"label": "Vespertino (Tarde)", "value": "Tarde / Vespertino"},
+                                {"label": "EaD (Horário Flexível)", "value": "EaD / Flexível"}
                             ],
                             placeholder="Selecione o turno",
                             className="dash-dropdown"

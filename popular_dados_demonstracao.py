@@ -74,10 +74,10 @@ def popular_banco():
     
     contador = 1000
     cursos_config = [
-        ("Desenvolvimento de Software Multiplataforma (DSM)", "Noite", 42, "DSM"),
-        ("Gestão da Produção Industrial (GPI)", "Noite", 38, "GPI"),
-        ("Gestão de Recursos Humanos (GRH)", "Manhã", 40, "GRH"),
-        ("Gestão Empresarial (GE)", "EaD", 45, "GE")
+        ("Desenvolvimento de Software Multiplataforma (DSM)", "Noite / Noturno", 42, "DSM"),
+        ("Gestão da Produção Industrial (GPI)", "Noite / Noturno", 38, "GPI"),
+        ("Gestão de Recursos Humanos (GRH)", "Manhã / Diurno", 40, "GRH"),
+        ("Gestão Empresarial (GE)", "EaD / Flexível", 45, "GE")
     ]
     
     total_inseridos = 0
@@ -94,7 +94,7 @@ def popular_banco():
             
             cidade = random.choice(CIDADES)
             genero = random.choice(["Masculino", "Feminino", "Masculino" if sigla in ["DSM", "GPI"] else "Feminino"])
-            turno = turno_padrao if sigla in ["DSM", "GPI", "EaD"] else random.choice(["Manhã", "Noite"])
+            turno = turno_padrao if sigla in ["DSM", "GPI", "GE"] else random.choice(["Manhã / Diurno", "Noite / Noturno"])
             
             trabalha = random.choice(["Sim", "Sim", "Sim", "Não"])
             vinculo = random.choice(["Sou registrado(a) no comércio", "Estágio", "Autônomo", "Servidor Público"]) if trabalha == "Sim" else "Não trabalho"
