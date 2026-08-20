@@ -676,7 +676,7 @@ def renderizar_cards_de_cursos(df, active_course):
     return html.Div(className="course-hub-grid", children=cards)
 
 # =============================================================================
-# HELPER DE RENDERIZAÇÃO DE RESULTADOS: ULTRA-COMPACTO, BARRAS FINAS E SEM PIZZA
+# HELPER DE RENDERIZAÇÃO DE RESULTADOS: GRÁFICOS DE BARRA COMPACTOS & PROFISSIONAIS
 # =============================================================================
 def criar_grafico_para_leigos(df, col, titulo, tipo='bar-h'):
     if col not in df.columns or df[col].dropna().empty:
@@ -693,43 +693,70 @@ def criar_grafico_para_leigos(df, col, titulo, tipo='bar-h'):
     pct_lider = vc.iloc[0]['Percentual']
     qtd_lider = vc.iloc[0]['Respostas']
     
-    # Linhas de Barras Horizontais Compactas e Finas (Design Enxuto e Elegante)
-    linhas_barras = []
-    icones_rank = ["🥇 1º", "🥈 2º", "🥉 3º", "4º", "5º", "6º", "7º", "8º"]
+    # 1. Preparar Gráfico de Barras Profissional e Compacto (Sem Pizza)
+    vc_chart = vc.head(7).sort_values(by='Respostas', ascending=True)
+    vc_chart['Rotulo'] = [f"  {p:.1f}% ({r} alunos)" for p, r in zip(vc_chart['Percentual'], vc_chart['Respostas'])]
     
-    for idx, row in vc.head(7).iterrows():
-        is_leader = (idx == 0)
-        rank_label = icones_rank[idx] if idx < len(icones_rank) else f"{idx+1}º"
-        pct_val = row['Percentual']
-        bar_color = "linear-gradient(90deg, #0284c7 0%, #38bdf8 100%)" if is_leader else "#94a3b8"
-        
-        linhas_barras.append(
-            html.Div(className=f"slim-bar-row {'slim-bar-row-leader' if is_leader else ''}", children=[
-                html.Span(rank_label, className="slim-rank-badge"),
-                html.Span(str(row[col]), className="slim-option-label", title=str(row[col])),
-                html.Div(className="slim-progress-track", children=[
-                    html.Div(className="slim-progress-fill", style={"width": f"{pct_val:.1f}%", "background": bar_color})
-                ]),
-                html.Span(f"{pct_val:.1f}%", className="slim-percent-value"),
-                html.Span(f"({row['Respostas']} alunos)", className="slim-count-pill")
-            ])
+    max_resp = vc_chart['Respostas'].max()
+    cores_barras = ["#0284c7" if r == max_resp else "#38bdf8" for r in vc_chart['Respostas']]
+    
+    chart_height = max(160, min(210, len(vc_chart) * 28 + 35))
+    
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=vc_chart['Percentual'],
+        y=vc_chart[col].astype(str),
+        orientation='h',
+        text=vc_chart['Rotulo'],
+        textposition='outside',
+        cliponaxis=False,
+        marker=dict(
+            color=cores_barras,
+            line=dict(width=0),
+            opacity=0.95
+        ),
+        width=0.45
+    ))
+    
+    max_pct = vc_chart['Percentual'].max()
+    fig.update_layout(
+        height=chart_height,
+        template="plotly_white",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="Inter, -apple-system, sans-serif", size=12, color="#1e293b"),
+        margin=dict(l=10, r=70, t=10, b=25),
+        xaxis=dict(
+            showgrid=True,
+            gridcolor="#f1f5f9",
+            zeroline=False,
+            title=dict(text="Porcentagem dos Alunos (%)", font=dict(size=11, color="#64748b")),
+            range=[0, min(100, max_pct * 1.35) if max_pct > 0 else 100]
+        ),
+        yaxis=dict(
+            showgrid=False,
+            tickfont=dict(size=12, color="#0f172a", family="Inter, sans-serif")
         )
+    )
 
     return html.Div(className="compact-result-card", children=[
-        # Header Compacto (1 Linha)
+        # Header Compacto & Profissional
         html.Div(className="compact-result-header", children=[
             html.Div(className="compact-header-left", children=[
                 html.H3(titulo, className="compact-title"),
                 html.Span(f"{total} respostas", className="compact-total-pill")
             ]),
             html.Div(className="compact-insight-badge", children=[
-                html.Span("💡 Líder: ", style={"fontWeight": "600", "color": "#0369a1"}),
-                html.Strong(f"'{item_lider}' ({pct_lider:.1f}% · {qtd_lider} alunos)", style={"color": "#0284c7"})
+                html.Span("🏆 Mais Escolhido: ", style={"fontWeight": "700", "color": "#0369a1"}),
+                html.Strong(f"'{item_lider}'", style={"color": "#0284c7"}),
+                html.Span(f" com {pct_lider:.1f}% ({qtd_lider} alunos)", style={"color": "#059669", "fontWeight": "600"})
             ])
         ]),
         
-        # Lista de Barras Finas Compactas
-        html.Div(className="slim-bars-container", children=linhas_barras)
+        # Gráfico de Barras Plotly Compacto e Elegante
+        html.Div(className="compact-plot-wrapper", children=[
+            dcc.Graph(figure=fig, config={'displayModeBar': False})
+        ])
     ])
 
 # =============================================================================
@@ -1270,20 +1297,29 @@ def render_active_course_section(active_course, active_question_id, json_data):
 
         if posse_dados:
             df_bens = pd.DataFrame(posse_dados)
-            linhas_bens = []
-            for _, r in df_bens.sort_values(by="Porcentagem", ascending=False).iterrows():
-                pct_val = r['Porcentagem']
-                linhas_bens.append(
-                    html.Div(className="slim-bar-row", children=[
-                        html.Span("📱", className="slim-rank-badge"),
-                        html.Span(str(r['Equipamento']), className="slim-option-label"),
-                        html.Div(className="slim-progress-track", children=[
-                            html.Div(className="slim-progress-fill", style={"width": f"{pct_val:.1f}%", "background": "linear-gradient(90deg, #0284c7 0%, #38bdf8 100%)"})
-                        ]),
-                        html.Span(f"{pct_val:.1f}%", className="slim-percent-value"),
-                        html.Span(f"({r['Qtd']} alunos)", className="slim-count-pill")
-                    ])
-                )
+            df_bens_sorted = df_bens.sort_values(by="Porcentagem", ascending=True)
+            
+            fig_bens = go.Figure()
+            fig_bens.add_trace(go.Bar(
+                x=df_bens_sorted['Porcentagem'],
+                y=df_bens_sorted['Equipamento'],
+                orientation='h',
+                text=[f"  {p:.1f}% ({q} alunos)" for p, q in zip(df_bens_sorted['Porcentagem'], df_bens_sorted['Qtd'])],
+                textposition='outside',
+                cliponaxis=False,
+                marker=dict(color="#0284c7", line=dict(width=0), opacity=0.95),
+                width=0.45
+            ))
+            fig_bens.update_layout(
+                height=200,
+                template="plotly_white",
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(family="Inter, sans-serif", size=12, color="#1e293b"),
+                margin=dict(l=10, r=70, t=10, b=25),
+                xaxis=dict(showgrid=True, gridcolor="#f1f5f9", range=[0, 120], title=dict(text="Adesão dos Alunos (%)", font=dict(size=11, color="#64748b"))),
+                yaxis=dict(showgrid=False)
+            )
             
             conteudo_grafico = html.Div(className="compact-result-card", children=[
                 html.Div(className="compact-result-header", children=[
@@ -1296,7 +1332,9 @@ def render_active_course_section(active_course, active_question_id, json_data):
                         html.Strong(f"Adesão a tecnologias e serviços de conectividade", style={"color": "#0284c7"})
                     ])
                 ]),
-                html.Div(className="slim-bars-container", children=linhas_bens)
+                html.Div(className="compact-plot-wrapper", children=[
+                    dcc.Graph(figure=fig_bens, config={'displayModeBar': False})
+                ])
             ])
             
     # 2. Caso Especial: Nuvem de Palavras / Questões Qualitativas
@@ -1307,22 +1345,32 @@ def render_active_course_section(active_course, active_question_id, json_data):
             
         serie_texto = df_curso[col_sonhos].dropna().astype(str) if col_sonhos in df_curso.columns else pd.Series()
         img_b64 = gerar_imagem_nuvem(serie_texto)
-        top_termos = extrair_top_palavras(serie_texto, n=10)
+        top_termos = extrair_top_palavras(serie_texto, n=7)
         
-        tags_palavras = []
-        for rank_idx, (palavra, cont) in enumerate(top_termos):
-            is_top = (rank_idx < 3)
-            tags_palavras.append(
-                html.Div(className=f"word-chip {'word-chip-top' if is_top else ''}", children=[
-                    html.Span(f"#{rank_idx+1} ", style={"fontWeight": "800", "opacity": "0.7", "marginRight": "4px"}),
-                    html.Strong(palavra.capitalize()),
-                    html.Span(f" · {cont}x", style={"fontSize": "0.82rem", "marginLeft": "6px", "opacity": "0.85"})
-                ])
+        fig_palavras = None
+        if top_termos:
+            df_termos = pd.DataFrame(top_termos, columns=["Palavra", "Ocorrências"]).sort_values(by="Ocorrências", ascending=True)
+            fig_palavras = go.Figure()
+            fig_palavras.add_trace(go.Bar(
+                x=df_termos['Ocorrências'],
+                y=df_termos['Palavra'].str.capitalize(),
+                orientation='h',
+                text=[f"  {c} menções" for c in df_termos['Ocorrências']],
+                textposition='outside',
+                cliponaxis=False,
+                marker=dict(color="#0284c7", line=dict(width=0), opacity=0.95),
+                width=0.45
+            ))
+            fig_palavras.update_layout(
+                height=180,
+                template="plotly_white",
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(family="Inter, sans-serif", size=12, color="#1e293b"),
+                margin=dict(l=10, r=55, t=10, b=25),
+                xaxis=dict(showgrid=True, gridcolor="#f1f5f9", title=dict(text="Total de Menções", font=dict(size=11, color="#64748b"))),
+                yaxis=dict(showgrid=False)
             )
-            
-        comp_tags = html.Div([
-            html.Div(className="word-chips-grid", children=tags_palavras)
-        ]) if tags_palavras else html.Div("Volume insuficiente de respostas textuais.", style={"color": "#64748b", "padding": "10px"})
             
         comp_nuvem = html.Div(className="wordcloud-img-wrapper", children=[
             html.Img(src=f"data:image/png;base64,{img_b64}", className="wordcloud-img", style={"maxHeight": "140px"})
@@ -1339,9 +1387,9 @@ def render_active_course_section(active_course, active_question_id, json_data):
                     html.Strong("Conceitos e motivações mais frequentes", style={"color": "#0284c7"})
                 ])
             ]),
-            html.Div(style={"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "16px", "alignItems": "center", "marginTop": "12px"}, children=[
+            html.Div(style={"display": "grid", "gridTemplateColumns": "1fr 1.2fr", "gap": "16px", "alignItems": "center", "marginTop": "8px"}, children=[
                 comp_nuvem,
-                comp_tags
+                dcc.Graph(figure=fig_palavras, config={'displayModeBar': False}) if fig_palavras else html.Div()
             ])
         ])
 
