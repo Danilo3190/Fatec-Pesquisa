@@ -901,6 +901,38 @@ body {
   border-radius: var(--radius-sm);
 }
 
+.word-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.word-chip {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.word-chip:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  background: #f0f9ff;
+}
+
+.word-chip-top {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  color: #0284c7;
+  font-weight: 700;
+}
+
 .table-toolbar {
   display: flex;
   justify-content: space-between;
