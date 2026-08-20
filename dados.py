@@ -676,115 +676,60 @@ def renderizar_cards_de_cursos(df, active_course):
     return html.Div(className="course-hub-grid", children=cards)
 
 # =============================================================================
-# HELPER DE RENDERIZAÇÃO DE RESULTADOS: BARRAS COMPACTAS, MODERNAS E SEM PIZZA
+# HELPER DE RENDERIZAÇÃO DE RESULTADOS: ULTRA-COMPACTO, BARRAS FINAS E SEM PIZZA
 # =============================================================================
 def criar_grafico_para_leigos(df, col, titulo, tipo='bar-h'):
     if col not in df.columns or df[col].dropna().empty:
-        return html.Div(className="chart-card full-width", style={"textAlign": "center", "padding": "40px"}, children=[
-            html.H4("Nenhum dado registrado para esta pergunta neste curso.", style={"color": "#0f172a"}),
-            html.P("Assim que alunos deste curso responderem pelo formulário, as métricas aparecerão automaticamente.", style={"color": "#64748b"})
+        return html.Div(className="compact-result-card", style={"textAlign": "center", "padding": "24px"}, children=[
+            html.P("Nenhum dado registrado para esta pergunta neste curso.", style={"color": "#64748b", "margin": 0})
         ])
         
     vc = df[col].dropna().astype(str).value_counts().reset_index()
     vc.columns = [col, 'Respostas']
     total = vc['Respostas'].sum()
     vc['Percentual'] = (vc['Respostas'] / total) * 100
-    vc['Rotulo'] = [f" {p:.1f}% ({r})" for p, r in zip(vc['Percentual'], vc['Respostas'])]
     
     item_lider = vc.iloc[0][col]
     pct_lider = vc.iloc[0]['Percentual']
     qtd_lider = vc.iloc[0]['Respostas']
     
-    # 1. CARDS VISUAIS DE PROGRESSO (MÉTRICA RÁPIDA E ELEGANTE)
-    cards_opcoes = []
+    # Linhas de Barras Horizontais Compactas e Finas (Design Enxuto e Elegante)
+    linhas_barras = []
     icones_rank = ["🥇 1º", "🥈 2º", "🥉 3º", "4º", "5º", "6º", "7º", "8º"]
     
-    for idx, row in vc.head(6).iterrows():
+    for idx, row in vc.head(7).iterrows():
         is_leader = (idx == 0)
         rank_label = icones_rank[idx] if idx < len(icones_rank) else f"{idx+1}º"
         pct_val = row['Percentual']
-        bar_color = "#0284c7" if is_leader else "#64748b"
+        bar_color = "linear-gradient(90deg, #0284c7 0%, #38bdf8 100%)" if is_leader else "#94a3b8"
         
-        cards_opcoes.append(
-            html.Div(className=f"metric-option-card {'metric-option-leader' if is_leader else ''}", children=[
-                html.Div(className="metric-option-top", children=[
-                    html.Span(rank_label, className="metric-rank-badge", style={"color": "#0284c7" if is_leader else "#64748b"}),
-                    html.Span(f"{row['Respostas']} aluno(s)", className="metric-count-pill")
+        linhas_barras.append(
+            html.Div(className=f"slim-bar-row {'slim-bar-row-leader' if is_leader else ''}", children=[
+                html.Span(rank_label, className="slim-rank-badge"),
+                html.Span(str(row[col]), className="slim-option-label", title=str(row[col])),
+                html.Div(className="slim-progress-track", children=[
+                    html.Div(className="slim-progress-fill", style={"width": f"{pct_val:.1f}%", "background": bar_color})
                 ]),
-                html.Div(row[col], className="metric-option-name"),
-                html.Div(className="metric-option-percent-row", children=[
-                    html.Span(f"{pct_val:.1f}%", className="metric-large-percent"),
-                    html.Span(f"({row['Respostas']}/{total})", className="metric-fraction")
-                ]),
-                html.Div(className="metric-progress-bg", children=[
-                    html.Div(className="metric-progress-fill", style={"width": f"{pct_val:.1f}%", "backgroundColor": bar_color})
-                ])
+                html.Span(f"{pct_val:.1f}%", className="slim-percent-value"),
+                html.Span(f"({row['Respostas']} alunos)", className="slim-count-pill")
             ])
         )
 
-    # 2. GRÁFICO DE BARRAS HORIZONTAIS COMPACTO, ELEGANTE E ATRAENTE
-    vc_chart = vc.head(8).sort_values(by='Respostas', ascending=True)
-    num_bars = len(vc_chart)
-    chart_height = max(180, min(280, num_bars * 36 + 45))
-    
-    fig = px.bar(
-        vc_chart,
-        x='Percentual',
-        y=col,
-        orientation='h',
-        text='Rotulo',
-        color='Percentual',
-        color_continuous_scale=[[0.0, "#38bdf8"], [1.0, "#0284c7"]],
-        title=""
-    )
-    
-    fig.update_layout(
-        coloraxis_showscale=False,
-        yaxis_title="",
-        xaxis_title="Porcentagem (%)",
-        height=chart_height,
-        template="plotly_white",
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Inter, sans-serif", size=12, color="#1e293b"),
-        margin=dict(l=10, r=45, t=10, b=25),
-        xaxis=dict(showgrid=True, gridcolor="#f1f5f9", zeroline=False, range=[0, min(100, max(vc_chart['Percentual']) * 1.25)]),
-        yaxis=dict(showgrid=False)
-    )
-    fig.update_traces(
-        textposition='outside',
-        cliponaxis=False,
-        marker=dict(line=dict(width=0), opacity=0.95),
-        width=0.55
-    )
-
-    # 3. RESUMO DIRETO PARA LEIGOS
-    resumo_leigo = html.Div(className="layman-insight-card", children=[
-        html.Div(className="insight-badge", children="💡 Resumo dos Resultados"),
-        html.P([
-            html.Span("Maioria dos alunos: ", style={"fontWeight": "600", "color": "#0f172a"}),
-            html.Strong(f"'{item_lider}'", style={"color": "#0284c7"}),
-            f" representando ",
-            html.Strong(f"{pct_lider:.1f}%", style={"color": "#059669"}),
-            f" ({qtd_lider} de {total} respondentes)."
-        ], style={"margin": 0, "fontSize": "0.93rem", "lineHeight": "1.45"})
-    ])
-
-    return html.Div(className="chart-card full-width", children=[
-        html.Div(style={"display": "flex", "justifyContent": "space-between", "alignItems": "center", "marginBottom": "12px", "flexWrap": "wrap", "gap": "8px"}, children=[
-            html.H3(titulo, className="chart-card-title", style={"margin": 0}),
-            html.Span(f"Total: {total} respostas", style={"fontSize": "0.82rem", "fontWeight": "700", "color": "#64748b", "background": "#f1f5f9", "padding": "4px 10px", "borderRadius": "12px"})
-        ]),
-        resumo_leigo,
-        html.Div(className="compact-analysis-grid", children=[
-            html.Div(className="compact-cards-col", children=cards_opcoes),
-            html.Div(className="compact-chart-col", children=[
-                html.Div(className="chart-col-header", children=[
-                    html.Span("📊 Gráfico de Distribuição Comparativa", className="chart-col-title")
-                ]),
-                dcc.Graph(figure=fig, config={'displayModeBar': False})
+    return html.Div(className="compact-result-card", children=[
+        # Header Compacto (1 Linha)
+        html.Div(className="compact-result-header", children=[
+            html.Div(className="compact-header-left", children=[
+                html.H3(titulo, className="compact-title"),
+                html.Span(f"{total} respostas", className="compact-total-pill")
+            ]),
+            html.Div(className="compact-insight-badge", children=[
+                html.Span("💡 Líder: ", style={"fontWeight": "600", "color": "#0369a1"}),
+                html.Strong(f"'{item_lider}' ({pct_lider:.1f}% · {qtd_lider} alunos)", style={"color": "#0284c7"})
             ])
-        ])
+        ]),
+        
+        # Lista de Barras Finas Compactas
+        html.Div(className="slim-bars-container", children=linhas_barras)
     ])
 
 # =============================================================================
@@ -1325,74 +1270,33 @@ def render_active_course_section(active_course, active_question_id, json_data):
 
         if posse_dados:
             df_bens = pd.DataFrame(posse_dados)
-            df_bens_sorted = df_bens.sort_values(by="Porcentagem", ascending=True)
-            df_bens_sorted["Rotulo"] = [f" {p:.1f}% ({q})" for p, q in zip(df_bens_sorted["Porcentagem"], df_bens_sorted["Qtd"])]
-            
-            # Cards de resumo dos bens
-            cards_bens = []
+            linhas_bens = []
             for _, r in df_bens.sort_values(by="Porcentagem", ascending=False).iterrows():
-                cards_bens.append(
-                    html.Div(className="metric-option-card", children=[
-                        html.Div(className="metric-option-top", children=[
-                            html.Span("📱 Equipamento", className="metric-rank-badge", style={"color": "#0284c7"}),
-                            html.Span(f"{r['Qtd']} alunos", className="metric-count-pill")
+                pct_val = r['Porcentagem']
+                linhas_bens.append(
+                    html.Div(className="slim-bar-row", children=[
+                        html.Span("📱", className="slim-rank-badge"),
+                        html.Span(str(r['Equipamento']), className="slim-option-label"),
+                        html.Div(className="slim-progress-track", children=[
+                            html.Div(className="slim-progress-fill", style={"width": f"{pct_val:.1f}%", "background": "linear-gradient(90deg, #0284c7 0%, #38bdf8 100%)"})
                         ]),
-                        html.Div(r['Equipamento'], className="metric-option-name"),
-                        html.Div(className="metric-option-percent-row", children=[
-                            html.Span(f"{r['Porcentagem']:.1f}%", className="metric-large-percent"),
-                            html.Span(f"({r['Qtd']}/{total_alunos})", className="metric-fraction")
-                        ]),
-                        html.Div(className="metric-progress-bg", children=[
-                            html.Div(className="metric-progress-fill", style={"width": f"{r['Porcentagem']:.1f}%", "backgroundColor": "#0284c7"})
-                        ])
+                        html.Span(f"{pct_val:.1f}%", className="slim-percent-value"),
+                        html.Span(f"({r['Qtd']} alunos)", className="slim-count-pill")
                     ])
                 )
-                
-            fig_bens = px.bar(
-                df_bens_sorted,
-                x='Porcentagem',
-                y='Equipamento',
-                orientation='h',
-                text='Rotulo',
-                color='Porcentagem',
-                color_continuous_scale=[[0.0, "#38bdf8"], [1.0, "#0284c7"]],
-                title=""
-            )
-            fig_bens.update_layout(
-                coloraxis_showscale=False,
-                yaxis_title="",
-                xaxis_title="Adesão (%)",
-                height=240,
-                template="plotly_white",
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(family="Inter, sans-serif", size=12, color="#1e293b"),
-                margin=dict(l=10, r=45, t=10, b=25),
-                xaxis=dict(showgrid=True, gridcolor="#f1f5f9", range=[0, 115]),
-                yaxis=dict(showgrid=False)
-            )
-            fig_bens.update_traces(
-                textposition='outside',
-                cliponaxis=False,
-                marker=dict(line=dict(width=0), opacity=0.95),
-                width=0.55
-            )
             
-            conteudo_grafico = html.Div(className="chart-card full-width", children=[
-                html.H3(f"Acesso a Recursos Tecnológicos ({curso_info['sigla']})", className="chart-card-title", style={"marginBottom": "12px"}),
-                html.Div(className="layman-insight-card", children=[
-                    html.Div(className="insight-badge", children="💡 Leitura Fácil"),
-                    html.P(f"Visão consolidada dos equipamentos e serviços de conectividade dos estudantes de {curso_info['sigla']}.", style={"margin": 0, "fontSize": "0.93rem"})
-                ]),
-                html.Div(className="compact-analysis-grid", children=[
-                    html.Div(className="compact-cards-col", children=cards_bens),
-                    html.Div(className="compact-chart-col", children=[
-                        html.Div(className="chart-col-header", children=[
-                            html.Span("📊 Gráfico Comparativo de Equipamentos", className="chart-col-title")
-                        ]),
-                        dcc.Graph(figure=fig_bens, config={'displayModeBar': False})
+            conteudo_grafico = html.Div(className="compact-result-card", children=[
+                html.Div(className="compact-result-header", children=[
+                    html.Div(className="compact-header-left", children=[
+                        html.H3(f"Acesso a Recursos Tecnológicos ({curso_info['sigla']})", className="compact-title"),
+                        html.Span(f"{total_alunos} alunos", className="compact-total-pill")
+                    ]),
+                    html.Div(className="compact-insight-badge", children=[
+                        html.Span("💡 Panorama: ", style={"fontWeight": "600", "color": "#0369a1"}),
+                        html.Strong(f"Adesão a tecnologias e serviços de conectividade", style={"color": "#0284c7"})
                     ])
-                ])
+                ]),
+                html.Div(className="slim-bars-container", children=linhas_bens)
             ])
             
     # 2. Caso Especial: Nuvem de Palavras / Questões Qualitativas
@@ -1403,7 +1307,7 @@ def render_active_course_section(active_course, active_question_id, json_data):
             
         serie_texto = df_curso[col_sonhos].dropna().astype(str) if col_sonhos in df_curso.columns else pd.Series()
         img_b64 = gerar_imagem_nuvem(serie_texto)
-        top_termos = extrair_top_palavras(serie_texto, n=8)
+        top_termos = extrair_top_palavras(serie_texto, n=10)
         
         tags_palavras = []
         for rank_idx, (palavra, cont) in enumerate(top_termos):
@@ -1416,63 +1320,28 @@ def render_active_course_section(active_course, active_question_id, json_data):
                 ])
             )
             
-        fig_palavras = None
-        if top_termos:
-            df_termos = pd.DataFrame(top_termos, columns=["Palavra", "Ocorrências"]).sort_values(by="Ocorrências", ascending=True)
-            df_termos["Rotulo"] = [f" {c} menções" for c in df_termos["Ocorrências"]]
-            fig_palavras = px.bar(
-                df_termos,
-                x='Ocorrências',
-                y='Palavra',
-                orientation='h',
-                text='Rotulo',
-                color='Ocorrências',
-                color_continuous_scale=[[0.0, "#38bdf8"], [1.0, "#0284c7"]],
-                title=""
-            )
-            fig_palavras.update_layout(
-                coloraxis_showscale=False,
-                yaxis_title="",
-                xaxis_title="Menções",
-                height=220,
-                template="plotly_white",
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(family="Inter, sans-serif", size=12, color="#1e293b"),
-                margin=dict(l=10, r=45, t=10, b=25),
-                xaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
-                yaxis=dict(showgrid=False)
-            )
-            fig_palavras.update_traces(
-                textposition='outside',
-                cliponaxis=False,
-                marker=dict(line=dict(width=0), opacity=0.95),
-                width=0.55
-            )
-            
-        comp_tags_e_grafico = html.Div([
-            html.Div(className="word-chips-grid", style={"marginBottom": "14px"}, children=tags_palavras),
-            dcc.Graph(figure=fig_palavras, config={'displayModeBar': False}) if fig_palavras else html.Div()
-        ]) if tags_palavras else html.Div("Volume insuficiente de respostas textuais para extrair palavras.", style={"color": "#64748b", "padding": "20px"})
+        comp_tags = html.Div([
+            html.Div(className="word-chips-grid", children=tags_palavras)
+        ]) if tags_palavras else html.Div("Volume insuficiente de respostas textuais.", style={"color": "#64748b", "padding": "10px"})
             
         comp_nuvem = html.Div(className="wordcloud-img-wrapper", children=[
-            html.Img(src=f"data:image/png;base64,{img_b64}", className="wordcloud-img")
+            html.Img(src=f"data:image/png;base64,{img_b64}", className="wordcloud-img", style={"maxHeight": "140px"})
         ]) if img_b64 else html.Div()
         
-        conteudo_grafico = html.Div(className="chart-card full-width", children=[
-            html.H3(f"{item_selecionado['icone']} {item_selecionado['titulo']} ({curso_info['sigla']})", className="chart-card-title", style={"marginBottom": "12px"}),
-            html.Div(className="layman-insight-card", children=[
-                html.Div(className="insight-badge", children="💡 Leitura Fácil dos Sonhos & Expectativas"),
-                html.P("Os termos destacados refletem as principais ambições profissionais, crescimento pessoal e objetivos dos alunos.", style={"margin": 0, "fontSize": "0.93rem"})
-            ]),
-            html.Div(className="compact-analysis-grid", children=[
-                html.Div(className="compact-cards-col", children=[comp_nuvem]),
-                html.Div(className="compact-chart-col", children=[
-                    html.Div(className="chart-col-header", children=[
-                        html.Span("📊 Termos Mais Citados", className="chart-col-title")
-                    ]),
-                    comp_tags_e_grafico
+        conteudo_grafico = html.Div(className="compact-result-card", children=[
+            html.Div(className="compact-result-header", children=[
+                html.Div(className="compact-header-left", children=[
+                    html.H3(f"{item_selecionado['icone']} {item_selecionado['titulo']} ({curso_info['sigla']})", className="compact-title"),
+                    html.Span(f"{total_alunos} alunos", className="compact-total-pill")
+                ]),
+                html.Div(className="compact-insight-badge", children=[
+                    html.Span("💡 Análise de Sentimento: ", style={"fontWeight": "600", "color": "#0369a1"}),
+                    html.Strong("Conceitos e motivações mais frequentes", style={"color": "#0284c7"})
                 ])
+            ]),
+            html.Div(style={"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "16px", "alignItems": "center", "marginTop": "12px"}, children=[
+                comp_nuvem,
+                comp_tags
             ])
         ])
 
