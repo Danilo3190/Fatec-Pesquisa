@@ -41,4 +41,6 @@ Todas as perguntas da pesquisa estão organizadas em **botões visuais e clicáv
 
 ## 🔒 Sobre os dados
 
-Todos os dados incluídos neste repositório (`Question_Socio.xlsx` e `fatec_pesquisa.db`) são **fictícios**, gerados apenas para demonstração. Nomes, e-mails, RAs, CPFs, datas de nascimento e respostas não correspondem a nenhum aluno real.
+O repositório inclui apenas o banco `fatec_pesquisa.db` com dados **fictícios** de demonstração (nomes, RAs, CPFs e respostas inventados).
+
+Para analisar uma pesquisa real, coloque a planilha exportada do Forms como `Question_Socio.xlsx` na raiz do projeto. Ela é carregada automaticamente e **não é versionada** (`*.xlsx` está no `.gitignore`), para que dados pessoais de alunos nunca sejam publicados.
